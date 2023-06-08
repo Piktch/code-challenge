@@ -12,7 +12,11 @@ class App {
   }
 
   private config(): void {
-    this.app.use(cors());
+    const allowedOrigins = ['http://localhost:3000'];
+    const options: cors.CorsOptions = {
+      origin: allowedOrigins
+    };
+    this.app.use(cors(options));
     this.app.use(bodyParser.json());
     this.app.use(
       bodyParser.urlencoded({

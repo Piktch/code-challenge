@@ -22,8 +22,8 @@ let rate = {
   "BOB": 6.909116,
   "BRL": 4.9239,
 }
-export const currencyExchangeController = express.Router().get('/get-exchange-rate', async (req: express.Request, res: express.Response) => {
-  const responceWait = new Promise((resolve, reject) => {
+export const currencyExchangeController = express.Router().post('/get-exchange', async (req: express.Request, res: express.Response) => {
+  const responceWait = new Promise<any>((resolve, reject) => {
     fetch("https://openexchangerates.org/api/latest.json?app_id=f84076fd2e8f4b8abd3e080f9a1b4798")
     .then(response  => {
       if(!response .ok) {
@@ -38,5 +38,13 @@ export const currencyExchangeController = express.Router().get('/get-exchange-ra
       resolve({status: "error", message: "Error fetching Exchange rates"})
     })
   })
+  console.log(req.body)
+  let exchangeRates = await responceWait
+  if(exchangeRates.rates) {
+    console.log(exchangeRates.rates[req.body.from])
+    let usd = req.body.fromValue / exchangeRates.rates[req.body.from]
+    let expectedCurrencyValue = usd * exchangeRates.rates[req.body.to]
+    return res.json({status: "success", value: expectedCurrencyValue})
+  }
   return res.json(await responceWait)
 })
