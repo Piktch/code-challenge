@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import currencyArray from "./constants/currencyList"
 import Container from '@mui/material/Container';
 import { margin } from '@mui/system';
+import Typography from '@mui/material/Typography';
 
 function App() {
   const [fromCurrency, setFromCurrency] = useState("");
@@ -18,7 +19,10 @@ function App() {
   const [toValue, setToValue] = useState(0);
   return (
     <>
-      <Container sx={{mt: "2rem", mb: "1rem"}} maxWidth="sm">
+      <Container sx={{ mt: "2rem", mb: "1rem" }} maxWidth="sm">
+        <Typography variant="button" display="block" gutterBottom>
+          Convert from:
+        </Typography>
         <Stack spacing={2} direction="row">
           <Autocomplete
             disablePortal
@@ -42,9 +46,12 @@ function App() {
               setFromValue(Number.parseFloat(e.target.value))
             }}
           />
-        </Stack>        
+        </Stack>
       </Container >
-      <Container sx={{mb: "1rem"}} maxWidth="sm">
+      <Container sx={{ mb: "1rem" }} maxWidth="sm">
+        <Typography variant="button" display="block" gutterBottom>
+          Convert to:
+        </Typography>
         <Stack spacing={2} direction="row">
           <Autocomplete
             disablePortal
@@ -58,10 +65,12 @@ function App() {
               setToCurrency(newInputValue)
             }}
           />
-          <div>{toValue}</div>
+          <Typography fontSize={"1rem"} variant="button" display="block" gutterBottom>
+            {toValue.toLocaleString(navigator.language, { maximumFractionDigits: 2 })}
+          </Typography>
         </Stack>
-        </Container>
-        <Container maxWidth="sm">
+      </Container>
+      <Container maxWidth="sm">
         <Button
           variant="contained"
           onClick={() => {
@@ -81,7 +90,7 @@ function App() {
               });
           }}
         >Convert</Button>
-        </Container>
+      </Container>
     </>
   )
 }
