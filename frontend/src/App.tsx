@@ -7,20 +7,7 @@ import currencyService from "./services/currencyService"
 import currencyExchange from "./types/currencyExchange";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-
-const currencyArray = [
-    "AZN",
-    "BAM",
-    "BBD",
-    "BDT",
-    "BGN",
-    "BHD",
-    "BIF",
-    "BMD",
-    "BND",
-    "BOB",
-    "BRL"
-]
+import currencyArray from "./constants/currencyList"
 
 function App() {
   const [fromCurrency, setFromCurrency] = useState("");
