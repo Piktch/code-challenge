@@ -13,6 +13,14 @@ import { margin } from '@mui/system';
 import Typography from '@mui/material/Typography';
 
 function App() {
+  const [history,setHistory] = useState<currencyExchange[]>(()=>{
+    let savedHistory = localStorage.getItem("convertationHistory")
+    if(savedHistory) {
+      return JSON.parse(savedHistory)
+    } else {
+      return []
+    }
+  })
   const [fromCurrency, setFromCurrency] = useState("");
   const [toCurrency, setToCurrency] = useState("");
   const [fromValue, setFromValue] = useState(0);
@@ -80,9 +88,21 @@ function App() {
               to: toCurrency,
             })
               .then((response: any) => {
-                console.log(response);
                 if (response.data.status == "success") {
                   setToValue(response.data.value)
+                  setHistory((prevHist)=>{
+                    if(history.length > 9) {
+                      history.shift()
+                    }
+                    let updatedArray = [...prevHist, {
+                      from: fromCurrency,
+                      fromValue: fromValue,
+                      to: toCurrency,
+                      toValue: response.data.value
+                    }]
+                    localStorage.setItem("convertationHistory", JSON.stringify(updatedArray))
+                    return updatedArray
+                  })
                 }
               })
               .catch((e: Error) => {
@@ -90,6 +110,18 @@ function App() {
               });
           }}
         >Convert</Button>
+      </Container>
+      <Container sx={{ mt: "2rem" }} maxWidth="sm">
+        <Typography fontSize={"1rem"} variant="button" display="block" gutterBottom>
+          Last convertations history:
+        </Typography>
+        {history.slice(0).reverse().map((item, index)=>{
+          return (
+          <Typography key={"historyObj" + index} sx={{ borderBottom: 1 }} fontSize={"1rem"} variant="button" display="block" gutterBottom>
+            {item.from}:{item.fromValue} = {item.to}:{item.toValue?item.toValue.toLocaleString(navigator.language, { maximumFractionDigits: 2 }):''}
+          </Typography>
+          )
+        })}
       </Container>
     </>
   )
