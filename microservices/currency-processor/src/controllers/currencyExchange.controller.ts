@@ -40,9 +40,13 @@ export const currencyExchangeController = express.Router().post('/get-exchange',
   })
   let exchangeRates = await responceWait // I planed to cache exchange rate structure to call openexchangerates.org once pear 2 hours...
   if(exchangeRates.rates) {
-    let usd = req.body.fromValue / exchangeRates.rates[req.body.from]
-    let expectedCurrencyValue = usd * exchangeRates.rates[req.body.to]
-    return res.json({status: "success", value: expectedCurrencyValue})
+    if(req.body.fromValue && req.body.from && req.body.to) {
+      let usd = req.body.fromValue / exchangeRates.rates[req.body.from]
+      let expectedCurrencyValue = usd * exchangeRates.rates[req.body.to]
+      return res.json({status: "success", value: expectedCurrencyValue})
+    } else {      
+      return res.json({ status: "error", message: "Something went wrong!"})
+    }
   }
-  return res.json(await responceWait)
+  return res.json({ status: "error", message: "Something went wrong!"})
 })

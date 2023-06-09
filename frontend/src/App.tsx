@@ -113,7 +113,7 @@ function App() {
       </Container>
       <Container sx={{ mt: "2rem" }} maxWidth="sm">
         <Typography fontSize={"1rem"} variant="button" display="block" gutterBottom>
-          Last convertations history:
+          Last conversations history:
         </Typography>
         {history.slice(0).reverse().map((item, index)=>{
           return (
